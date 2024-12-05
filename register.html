@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700;900" />
+  <title>EduVance - Register</title>
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <script>
+    // Language toggle function
+    function toggleLanguage(lang) {
+      const elements = document.querySelectorAll('[data-lang]');
+      elements.forEach((el) => {
+        const key = el.getAttribute('data-lang');
+        el.innerText = languageData[lang][key];
+      });
+    }
+
+    const languageData = {
+      en: {
+        createAccount: "Create an Account",
+        username: "Username",
+        email: "Email",
+        password: "Password",
+        confirmPassword: "Confirm Password",
+        class: "Class",
+        register: "Register",
+        alreadyHaveAccount: "Already have an account? ",
+        login: "Log in",
+      },
+      kn: {
+        createAccount: "ಖಾತೆ ರಚಿಸಿ",
+        username: "ಬಳಕೆದಾರ ಹೆಸರು",
+        email: "ಇಮೇಲ್",
+        password: "ಪಾಸ್ವರ್ಡ್",
+        confirmPassword: "ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಿಸಿ",
+        class: "ಹುದ್ದೆ",
+        register: "ನೋಂದಣಿ ಮಾಡಿ",
+        alreadyHaveAccount: "ಹೆಚ್ಚು ಖಾತೆ ಇದೆಯೆ? ",
+        login: "ಲಾಗಿನ್ ಮಾಡಿ",
+      }
+    };
+  </script>
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen flex-col bg-white overflow-x-hidden" style="font-family: Lexend, 'Noto Sans', sans-serif;">
+    <!-- Language Toggle Buttons -->
+    <div class="absolute top-4 right-4 flex gap-4">
+      <button onclick="toggleLanguage('en')" class="text-sm text-blue-500 hover:underline">English</button>
+      <button onclick="toggleLanguage('kn')" class="text-sm text-blue-500 hover:underline">ಕನ್ನಡ</button>
+    </div>
+
+    <header class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+      <h2 class="text-lg font-bold">EduVance</h2>
+    </header>
+
+    <main class="flex justify-center py-8 px-4 sm:px-40">
+      <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-2xl font-bold text-[#111517] text-center mb-4" data-lang="createAccount">Create an Account</h3>
+        
+        <form id="registration-form">
+          <div class="mb-4">
+              <label class="block text-sm font-medium text-[#111517] mb-1" for="username" data-lang="username">Username</label>
+              <input type="text" id="username" name="username" required class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your username" />
+          </div>
+      
+          <div class="mb-4">
+              <label class="block text-sm font-medium text-[#111517] mb-1" for="email" data-lang="email">Email</label>
+              <input type="email" id="email" name="email" required class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" />
+          </div>
+      
+          <div class="mb-4">
+              <label class="block text-sm font-medium text-[#111517] mb-1" for="password" data-lang="password">Password</label>
+              <input type="password" id="password" name="password" required class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Create a password" />
+          </div>
+      
+          <div class="mb-4">
+              <label class="block text-sm font-medium text-[#111517] mb-1" for="confirm-password" data-lang="confirmPassword">Confirm Password</label>
+              <input type="password" id="confirm-password" name="confirm-password" required class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Confirm your password" />
+          </div>
+      
+          <div class="mb-4">
+              <label class="block text-sm font-medium text-[#111517] mb-1" for="class" data-lang="class">Class</label>
+              <input type="text" id="class" name="class" required class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter the Class" />
+          </div>
+      
+          <div class="flex justify-center">
+              <button type="submit" class="w-full px-6 py-3 bg-[#47a6e6] text-white rounded-lg font-bold hover:bg-[#3b8dc3] transition-colors" aria-label="Register" data-lang="register">Register</button>
+          </div>
+      </form>
+      
+
+        <p class="mt-4 text-center text-sm text-[#647987]" data-lang="alreadyHaveAccount">
+          Already have an account? <a href="login.html" class="text-blue-600 hover:underline" data-lang="login">Log in</a>
+        </p>
+      </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-6">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="flex flex-wrap justify-center gap-6">
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">About</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Press</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Blog</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Careers</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Social</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+   document.addEventListener("DOMContentLoaded", () => {
+    const registrationForm = document.getElementById("registration-form");
+
+    registrationForm.addEventListener("submit", async (event) => {
+      event.preventDefault(); // Prevent default form submission
+
+      // Get form values
+      const username = document.getElementById("username").value.trim(); 
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const confirmPassword = document.getElementById("confirm-password").value.trim(); 
+
+      // Basic validation
+      if (!username || !email || !password || !confirmPassword) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      // Form submission data
+      const formData = {
+        username: username,
+        email: email,
+        password: password,
+        className: document.getElementById("class").value.trim()
+      };
+
+      try {
+        const response = await fetch('http://localhost:5000/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert(data.message);
+          window.location.href = 'profile_completion.html'; 
+        } else {
+          alert(data.message); 
+        }
+      } catch (error) {
+        console.error('Error during registration:', error);
+        alert('An error occurred during registration. Please try again.');
+      }
+    });
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#f8fafc',
+                        accent: '#818cf8'
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen text-gray-800 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-16">
+        <!-- Language Toggle -->
+        <div class="language-container absolute top-4 right-4">
+            <select id="language-switcher" onchange="changeLanguage(event)" class="px-4 py-2 bg-primary text-white rounded-md">
+                <option value="en">English</option>
+                <option value="kn">Kannada</option>
+            </select>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-primary to-accent p-8">
+                <h1 class="text-3xl font-bold text-white mb-2" data-translate="userProfile">User Profile</h1>
+                <p class="text-indigo-100 opacity-90" data-translate="manageAccount">Manage your account information</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" class="hidden mx-8 mt-6">
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <svg class="h-6 w-6 text-red-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p class="text-red-700"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="p-8 space-y-6">
+                <div class="grid gap-6 md:grid-cols-2">
+                    <!-- Username -->
+                    <div class="bg-gray-50 rounded-xl p-6 transition duration-300 hover:shadow-md">
+                        <p class="text-sm font-medium text-gray-500 mb-1" data-translate="username">Username</p>
+                        <p id="username" class="text-xl font-semibold loading">
+                            <span class="inline-block w-24 h-6 bg-gray-200 rounded animate-pulse"></span>
+                        </p>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="bg-gray-50 rounded-xl p-6 transition duration-300 hover:shadow-md">
+                        <p class="text-sm font-medium text-gray-500 mb-1" data-translate="email">Email</p>
+                        <p id="email" class="text-xl font-semibold loading">
+                            <span class="inline-block w-24 h-6 bg-gray-200 rounded animate-pulse"></span>
+                        </p>
+                    </div>
+
+                    <!-- Class -->
+                    <div class="bg-gray-50 rounded-xl p-6 transition duration-300 hover:shadow-md md:col-span-2">
+                        <p class="text-sm font-medium text-gray-500 mb-1" data-translate="class">Class</p>
+                        <p id="class_name" class="text-xl font-semibold loading">
+                            <span class="inline-block w-24 h-6 bg-gray-200 rounded animate-pulse"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Translations object (Example for English and Kannada)
+        const translations = {
+            "en": {
+                "userProfile": "User Profile",
+                "manageAccount": "Manage your account information",
+                "username": "Username",
+                "email": "Email",
+                "class": "Class"
+            },
+            "kn": {
+                "userProfile": "ಬಳಕೆದಾರ ಪ್ರೊಫೈಲ್",
+                "manageAccount": "ನಿಮ್ಮ ಖಾತೆ ಮಾಹಿತಿಯನ್ನು ನಿರ್ವಹಿಸಿ",
+                "username": "ಬಳಕೆದಾರ ಹೆಸರು",
+                "email": "ಇಮೇಲ್",
+                "class": "ವರ್ಗ"
+            }
+        };
+
+        // Function to load translations based on selected language
+        function loadTranslations(language) {
+            const selectedTranslations = translations[language];
+            document.querySelectorAll("[data-translate]").forEach((element) => {
+                const key = element.getAttribute("data-translate");
+                element.textContent = selectedTranslations[key] || key;
+            });
+        }
+
+        // Event listener for language change
+        function changeLanguage(event) {
+            const selectedLanguage = event.target.value;
+            loadTranslations(selectedLanguage);
+
+            // Optionally store the selected language in localStorage for persistent language preference
+            localStorage.setItem('preferredLanguage', selectedLanguage);
+        }
+
+        // On page load, set language from localStorage (if available) or default to English
+        window.onload = function() {
+            const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+            document.getElementById("language-switcher").value = savedLanguage; // Set the dropdown to the saved language
+            loadTranslations(savedLanguage);
+
+            // Load the profile data
+            checkAuthAndLoadProfile();
+        };
+
+        function checkAuthAndLoadProfile() {
+            const credentials = {
+                username: sessionStorage.getItem('username'),
+                password: sessionStorage.getItem('password')
+            };
+
+            if (!credentials.username || !credentials.password) {
+                handleError(new Error('No credentials found'));
+                return;
+            }
+
+            fetch('http://localhost:5000/api/profile', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(credentials)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(response.status === 401 ? 'Invalid credentials' : 'Failed to fetch profile');
+            })
+            .then(data => {
+                updateProfileUI(data);
+            })
+            .catch(handleError);
+        }
+
+        function updateProfileUI(data) {
+            ['username', 'email', 'class_name'].forEach(field => {
+                const element = document.getElementById(field);
+                element.textContent = data[field] || 'N/A';
+                element.classList.remove('loading');
+            });
+        }
+
+        function handleError(error) {
+            console.error('Error:', error);
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.querySelector('p').textContent = error.message;
+            errorMessage.classList.remove('hidden');
+
+            if (error.message.includes('credentials')) {
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        }
+    </script>
+
+</body>
+</html>

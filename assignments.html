@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <nav class="bg-blue-600 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-white text-2xl font-bold hover:text-gray-300">EduVance</a>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/dashboard.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-lg" id="dashboardNav">Dashboard</a>
+                    <a href="/courses.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-lg" id="coursesNav">Courses</a>
+                    <a href="/profile.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-lg" id="profileNav">Profile</a>
+                </div>
+                <div class="flex items-center">
+                    <select id="languageSelect" class="p-2 border rounded-lg">
+                        <option value="en">English</option>
+                        <option value="kn">ಕನ್ನಡ</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold text-center text-blue-700 mb-6" id="generateQuizTitle">Generate Custom Quiz</h1>
+
+        <!-- Assignment Generation Form -->
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <form id="assignment-form">
+                <div class="mb-4">
+                    <label for="subject" class="block text-gray-700 font-semibold" id="subjectLabel">Subject</label>
+                    <select id="subject" name="subject" class="mt-2 p-2 w-full border rounded-md">
+                        <option value="Math">Math</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <!-- Add more subjects as needed -->
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="difficulty" class="block text-gray-700 font-semibold" id="difficultyLabel">Difficulty Level</label>
+                    <select id="difficulty" name="difficulty" class="mt-2 p-2 w-full border rounded-md">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="topics" class="block text-gray-700 font-semibold" id="topicsLabel">Specific Topics (optional)</label>
+                    <input type="text" id="topics" name="topics" class="mt-2 p-2 w-full border rounded-md" 
+                           placeholder="e.g., Algebra, Trigonometry">
+                </div>
+
+                <div class="mb-4">
+                    <label for="questionCount" class="block text-gray-700 font-semibold" id="questionCountLabel">Number of Questions</label>
+                    <input type="number" id="questionCount" name="questionCount" min="1" max="10" value="5" 
+                           class="mt-2 p-2 w-full border rounded-md">
+                </div>
+
+                <div class="mb-4">
+                    <label for="format" class="block text-gray-700 font-semibold" id="formatLabel">Question Format</label>
+                    <select id="format" name="format" class="mt-2 p-2 w-full border rounded-md">
+                        <option value="multiple-choice">Multiple Choice</option>
+                        <option value="true-false">True/False</option>
+                        <option value="short-answer">Short Answer</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition" id="generateQuizButton">Generate Quiz</button>
+            </form>
+        </div>
+
+        <!-- Assignment Result Section -->
+        <div id="assignment-result" class="mt-6 p-4 bg-white rounded-lg shadow-lg hidden">
+            <h2 class="text-xl font-bold text-blue-700 mb-4" id="generatedQuizTitle">Generated Quiz</h2>
+            <div id="quiz-container">
+                <form id="quiz-form" class="space-y-6">
+                    <div id="questions-container" class="space-y-4"></div>
+                    <div class="flex space-x-4">
+                        <button type="submit" class="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition" id="submitAnswersButton">
+                            Submit Answers
+                        </button>
+                        <button type="button" id="reveal-answers" class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition hidden" id="revealAnswersButton">
+                            Reveal Answers
+                        </button>
+                    </div>
+                </form>
+                <div id="quiz-results" class="mt-4 hidden">
+                    <h3 class="text-lg font-bold text-blue-700" id="resultsTitle">Results</h3>
+                    <p id="score-display" class="text-lg mt-2"></p>
+                    <div id="answers-container" class="mt-4 space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gemini API configuration
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+
+        function generateQuizPrompt(formData) {
+            return `Generate a ${formData.questionCount}-question ${formData.format} quiz about ${formData.subject} at ${formData.difficulty} difficulty level${formData.topics ? ` focusing on ${formData.topics}` : ''}.
+Format EXACTLY as follows for each question:
+
+Question 1. [Question text]
+a) [Option 1]
+b) [Option 2]
+c) [Option 3]
+d) [Option 4]
+Answer: [letter only, e.g.: a]
+
+[Repeat format for remaining questions]`;
+        }
+
+        let quizData = null;
+
+        function parseQuizContent(content) {
+            try {
+                const questions = content.split(/Question \d+\./).filter(q => q.trim());
+                
+                return questions.map((q, index) => {
+                    const lines = q.trim().split('\n').filter(line => line.trim());
+                    const questionText = lines[0].trim();
+                    
+                    const options = lines.filter(line => /^[a-d]\)/.test(line.trim()))
+                        .map(line => line.replace(/^[a-d]\)\s*/, '').trim());
+                    
+                    const answerLine = lines.find(line => line.toLowerCase().startsWith('answer:'));
+                    const answerLetter = answerLine ? answerLine.split(':')[1].trim().toLowerCase() : '';
+                    const answerIndex = ['a', 'b', 'c', 'd'].indexOf(answerLetter);
+                    const answer = answerIndex !== -1 ? options[answerIndex] : '';
+
+                    return {
+                        question: questionText,
+                        options: options,
+                        answer: answer,
+                        id: `q${index}`
+                    };
+                });
+            } catch (error) {
+                console.error('Parsing error:', error);
+                return null;
+            }
+        }
+
+        function displayQuiz(questions) {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = questions.map((q, index) => `
+                <div class="p-4 border rounded shadow-sm bg-white">
+                    <p class="font-semibold mb-3 text-lg">Question ${index + 1}. ${q.question}</p>
+                    <div class="space-y-2 ml-4">
+                        ${q.options.map((option, optIndex) => `
+                            <div class="flex items-center p-2 hover:bg-gray-50 rounded">
+                                <input type="radio" 
+                                       name="${q.id}" 
+                                       value="${option}" 
+                                       id="${q.id}_${optIndex}"
+                                       class="form-radio h-4 w-4 text-blue-600">
+                                <label for="${q.id}_${optIndex}" 
+                                       class="ml-2 text-gray-700 cursor-pointer w-full">
+                                    ${['a', 'b', 'c', 'd'][optIndex]}) ${option}
+                                </label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showAnswers(questions) {
+            const container = document.getElementById('answers-container');
+            container.innerHTML = questions.map((q, index) => `
+                <div class="p-4 border rounded ${getUserAnswer(q.id) === q.answer ? 'bg-green-50' : 'bg-red-50'}">
+                    <p class="font-semibold mb-2">Question ${index + 1}. ${q.question}</p>
+                    <div class="ml-4 space-y-1">
+                        <p class="text-gray-600">Your answer: <span class="font-medium">${getUserAnswer(q.id) || 'Not answered'}</span></p>
+                        <p class="text-green-600">Correct answer: <span class="font-medium">${q.answer}</span></p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getUserAnswer(questionId) {
+            const selected = document.querySelector(`input[name="${questionId}"]:checked`);
+            return selected ? selected.value : null;
+        }
+
+        document.getElementById('assignment-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = {
+                subject: document.getElementById('subject').value,
+                difficulty: document.getElementById('difficulty').value,
+                topics: document.getElementById('topics').value,
+                questionCount: document.getElementById('questionCount').value,
+                format: document.getElementById('format').value
+            };
+
+            const resultContainer = document.getElementById('assignment-result');
+            resultContainer.classList.remove('hidden');
+
+            try {
+                const prompt = generateQuizPrompt(formData);
+                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.candidates && data.candidates[0].content) {
+                    const generatedQuiz = data.candidates[0].content.parts[0].text;
+                    quizData = parseQuizContent(generatedQuiz);
+                    
+                    if (quizData && quizData.length > 0) {
+                        displayQuiz(quizData);
+                        document.getElementById('quiz-form').classList.remove('hidden');
+                        document.getElementById('reveal-answers').classList.add('hidden');
+                        document.getElementById('quiz-results').classList.add('hidden');
+                    } else {
+                        throw new Error('Failed to parse quiz content');
+                    }
+                } else {
+                    throw new Error('No content received from API');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const questionsContainer = document.getElementById('questions-container');
+                questionsContainer.innerHTML = `<p class="text-red-500">Failed to generate quiz. Please try again. Error: ${error.message}</p>`;
+            }
+        });
+
+        document.getElementById('quiz-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('reveal-answers').classList.remove('hidden');
+            
+            // Calculate score
+            const score = quizData.reduce((acc, q) => {
+                return acc + (getUserAnswer(q.id) === q.answer ? 1 : 0);
+            }, 0);
+
+            document.getElementById('score-display').textContent = 
+                `Your score: ${score}/${quizData.length} (${Math.round(score/quizData.length * 100)}%)`;
+            
+            document.getElementById('quiz-results').classList.remove('hidden');
+        });
+
+        document.getElementById('reveal-answers').addEventListener('click', function() {
+            showAnswers(quizData);
+        });
+
+        // Language Dictionaries
+        const languages = {
+            en: {
+                dashboardNav: "Dashboard",
+                coursesNav: "Courses",
+                profileNav: "Profile",
+                generateQuizTitle: "Generate Custom Quiz",
+                subjectLabel: "Subject",
+                difficultyLabel: "Difficulty Level",
+                topicsLabel: "Specific Topics (optional)",
+                questionCountLabel: "Number of Questions",
+                formatLabel: "Question Format",
+                generateQuizButton: "Generate Quiz",
+                generatedQuizTitle: "Generated Quiz",
+                submitAnswersButton: "Submit Answers",
+                revealAnswersButton: "Reveal Answers",
+                resultsTitle: "Results",
+            },
+            kn: {
+                dashboardNav: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+                coursesNav: "ಕೋರ್ಸ್‌ಗಳು",
+                profileNav: "ಪ್ರೊಫೈಲ್",
+                generateQuizTitle: "ಕಸ್ಟಮ್ ಕ್ವಿಜ್ ರಚಿಸಿ",
+                subjectLabel: "ವಿಷಯ",
+                difficultyLabel: "ಕಠಿಣತೆ ಮಟ್ಟ",
+                topicsLabel: "ನಿರ್ದಿಷ್ಟ ವಿಷಯಗಳು (ಐಚ್ಛಿಕ)",
+                questionCountLabel: "ಪ್ರಶ್ನೆಗಳ ಸಂಖ್ಯೆ",
+                formatLabel: "ಪ್ರಶ್ನೆಯ ಫಾರ್ಮಟ್",
+                generateQuizButton: "ಕ್ವಿಜ್ ರಚಿಸಿ",
+                generatedQuizTitle: "ರಚಿಸಿದ ಕ್ವಿಜ್",
+                submitAnswersButton: "ಉತ್ತರಗಳನ್ನು ಸಲ್ಲಿಸಿ",
+                revealAnswersButton: "ಉತ್ತರಗಳನ್ನು ತೋರಿಸಿ",
+                resultsTitle: "ಫಲಿತಾಂಶಗಳು",
+            },
+        };
+
+        let currentLanguage = "en";
+
+        function updateLanguage(lang) {
+            const elements = {
+                dashboardNav: document.getElementById("dashboardNav"),
+                coursesNav: document.getElementById("coursesNav"),
+                profileNav: document.getElementById("profileNav"),
+                generateQuizTitle: document.getElementById("generateQuizTitle"),
+                subjectLabel: document.getElementById("subjectLabel"),
+                difficultyLabel: document.getElementById("difficultyLabel"),
+                topicsLabel: document.getElementById("topicsLabel"),
+                questionCountLabel: document.getElementById("questionCountLabel"),
+                formatLabel: document.getElementById("formatLabel"),
+                generateQuizButton: document.getElementById("generateQuizButton"),
+                generatedQuizTitle: document.getElementById("generatedQuizTitle"),
+                submitAnswersButton: document.getElementById("submitAnswersButton"),
+                revealAnswersButton: document.getElementById("revealAnswersButton"),
+                resultsTitle: document.getElementById("resultsTitle"),
+            };
+
+            for (const key in elements) {
+                if (elements[key]) {
+                    elements[key].textContent = languages[lang][key];
+                }
+            }
+
+            currentLanguage = lang;
+        }
+
+        document.getElementById("languageSelect").addEventListener("change", (event) => {
+            const newLang = event.target.value;
+            updateLanguage(newLang);
+        });
+    </script>
+
+</body>
+</html>

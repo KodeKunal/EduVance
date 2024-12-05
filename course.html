@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVance - Course Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Styles (Optional) */
+        .note-card {
+            background-color: #f9fafb; /* Tailwind's gray-50 color */
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+        <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header / Navigation Bar -->
+    <header class="bg-blue-600 text-white p-4 sticky top-0 z-10">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold">EduVance</a>
+            <input type="text" placeholder="Search Courses..." class="p-2 rounded bg-white text-black">
+            <div>
+                <a href="profile.html" class="mr-4">Profile</a>
+                <a href="dashboard.html" class="mr-4">Dashboard</a>
+
+                <a href="login.html" class="bg-red-600 p-2 rounded">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Course Page Content -->
+    <div class="container mx-auto p-6">
+        <!-- Course Title and Description -->
+        <section class="mb-8">
+            <h1 class="text-3xl font-bold">Striver's A2Z DSA Course</h1>
+            <p class="text-gray-700 mt-4">This is a comprehensive course on Data Structures and Algorithms, designed to take you through all the important concepts and problems.</p>
+        </section>
+
+        <!-- Course Content (Lessons) -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold">Course Content</h2>
+            <div class="mt-4">
+                <ul class="space-y-4">
+                    <!-- Loop through each lesson in your database -->
+                    <li class="flex justify-between items-center p-4 bg-white shadow rounded">
+                        <div>
+                            <h3 class="text-lg font-semibold">Lesson 1: Introduction to Arrays</h3>
+                            <p class="text-gray-600">Learn about arrays, how to use them, and their properties.</p>
+                        </div>
+                        <button class="bg-blue-500 text-white p-2 rounded" onclick="openNotes('Lesson 1')">Add Notes</button>
+                    </li>
+                    <li class="flex justify-between items-center p-4 bg-white shadow rounded">
+                        <div>
+                            <h3 class="text-lg font-semibold">Lesson 2: Searching Algorithms</h3>
+                            <p class="text-gray-600">Understand searching algorithms like Linear Search and Binary Search.</p>
+                        </div>
+                        <button class="bg-blue-500 text-white p-2 rounded" onclick="openNotes('Lesson 2')">Add Notes</button>
+                    </li>
+                    <!-- Add more lessons dynamically -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Notes Section -->
+        <section id="notes-section" class="hidden mt-8">
+            <h2 class="text-xl font-semibold">Notes for <span id="lesson-title"></span></h2>
+            <textarea id="notes-textarea" class="w-full p-4 mt-4 border rounded-md h-40" placeholder="Write your notes here..."></textarea>
+            <button onclick="saveNotes()" class="mt-4 bg-green-500 text-white p-2 rounded">Save Notes</button>
+            <button onclick="closeNotes()" class="mt-4 ml-4 bg-gray-500 text-white p-2 rounded">Cancel</button>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 EduVance. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript functions to manage notes
+        let currentLesson = '';
+
+        function openNotes(lessonName) {
+            currentLesson = lessonName;
+            document.getElementById('lesson-title').textContent = lessonName;
+            document.getElementById('notes-section').classList.remove('hidden');
+        }
+
+        function closeNotes() {
+            document.getElementById('notes-section').classList.add('hidden');
+        }
+
+        function saveNotes() {
+            const notes = document.getElementById('notes-textarea').value;
+            if (notes) {
+                // Save notes to a database or local storage (for now, just log it)
+                console.log(`Notes for ${currentLesson}: ${notes}`);
+                alert("Notes saved!");
+                closeNotes();
+            } else {
+                alert("Please write some notes before saving.");
+            }
+        }
+    </script>
+
+</body>
+</html>

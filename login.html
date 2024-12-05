@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+  <link
+    rel="stylesheet"
+    as="style"
+    onload="this.rel='stylesheet'"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend%3Awght@400;500;700;900&amp;family=Noto+Sans%3Awght@400;500;700;900"
+  />
+  <title>EduVance - Login</title>
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <script>
+    // Language toggle function
+    function toggleLanguage(lang) {
+      const elements = document.querySelectorAll('[data-lang]');
+      elements.forEach((el) => {
+        const key = el.getAttribute('data-lang');
+        el.innerText = languageData[lang][key];
+      });
+    }
+
+    const languageData = {
+      en: {
+        username: "Username",
+        password: "Password",
+        forgotPassword: "Forgot your password?",
+        login: "Log in",
+        signup: "Sign up",
+        welcomeBack: "Welcome back!",
+        newToEduVance: "New to EduVance? ",
+        signupNow: "Sign up now"
+      },
+      kn: {
+        username: "ಬಳಕೆದಾರ ಹೆಸರು",
+        password: "ಪಾಸ್ವರ್ಡ್",
+        forgotPassword: "ಪಾಸ್ವರ್ಡ್ ಮರೆತಿದ್ದೀರಾ?",
+        login: "ಲಾಗಿನ್ ಮಾಡಿ",
+        signup: "ನೋಂದಣಿ ಮಾಡಿ",
+        welcomeBack: "ನಮಸ್ಕಾರ!",
+        newToEduVance: "ಇದು EduVance ಗೆ ಹೊಸವೆಯೇ? ",
+        signupNow: "ಈಗ ನೋಂದಣಿ ಮಾಡಿ"
+      }
+    };
+  </script>
+</head>
+<body class="bg-gray-50">
+  <div class="relative flex min-h-screen flex-col items-center justify-center bg-white group/design-root overflow-x-hidden" style='font-family: Lexend, "Noto Sans", sans-serif;'>
+    
+    <!-- Language Toggle Buttons -->
+    <div class="absolute top-4 right-4 flex gap-4">
+      <button onclick="toggleLanguage('en')" class="text-sm text-blue-500 hover:underline">English</button>
+      <button onclick="toggleLanguage('kn')" class="text-sm text-blue-500 hover:underline">ಕನ್ನಡ</button>
+    </div>
+
+    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+      <header class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3 text-[#111517]">
+          <div class="size-4">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
+              <path
+                d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </div>
+          <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]" data-lang="signup">EduVance</h2>
+        </div>
+        <a href="register.html" class="min-w-[84px] h-10 px-4 bg-[#47a6e6] text-white rounded-lg font-bold text-sm flex items-center justify-center" data-lang="signup">Sign up</a>
+      </header>
+
+      <div class="bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-lg mb-6 h-40" style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 25%), url("https://cdn.usegalileo.ai/stability/69e0edfc-c49e-4abe-a196-827f448cd855.png");'>
+        <div class="p-4">
+          <p class="text-white text-2xl font-bold leading-tight" data-lang="welcomeBack">Welcome back!</p>
+        </div>
+      </div>
+
+      <form id="loginForm" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700" for="username" data-lang="username">Username</label>
+          <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter username" required class="mt-1 w-full h-12 px-4 text-base border rounded-lg focus:outline-none focus:ring focus:ring-blue-200 border-gray-300 bg-white"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700" for="password" data-lang="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" required class="mt-1 w-full h-12 px-4 text-base border rounded-lg focus:outline-none focus:ring focus:ring-blue-200 border-gray-300 bg-white"/>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <a href="/forgot-password" class="text-sm text-blue-500 hover:underline" data-lang="forgotPassword">Forgot your password?</a>
+        </div>
+
+        <button type="submit" class="w-full py-3 mt-4 bg-blue-500 text-white rounded-lg font-bold text-lg tracking-wider focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-600" data-lang="login">Log in</button>
+      </form>
+
+      <p class="text-center text-sm text-gray-600 mt-4">
+        <span data-lang="newToEduVance">New to EduVance? </span><a href="register.html" class="text-blue-500 hover:underline" data-lang="signupNow">Sign up now</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Include the JavaScript file -->
+  <script src="login.js"></script>
+
+</body>
+</html>
