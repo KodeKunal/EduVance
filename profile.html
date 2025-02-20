@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#f8fafc',
+                        textColor: '#2c3e50',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 text-gray-800 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-16">
+        <div class="bg-white/70 backdrop-blur-lg p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-center gap-4 mb-8 pb-6 border-b border-gray-200">
+                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-2xl text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                    User Profile
+                </h1>
+            </div>
+
+            <div id="error-message" class="bg-red-50 text-red-700 p-4 rounded-xl border-l-4 border-red-500 mb-6 hidden">
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center group">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mr-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-circle text-primary text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Username</p>
+                        <span id="username" class="text-lg font-semibold loading">Loading</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center group">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mr-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-envelope text-primary text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Email</p>
+                        <span id="email" class="text-lg font-semibold loading">Loading</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center group">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mr-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-graduation-cap text-primary text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Class</p>
+                        <span id="class_name" class="text-lg font-semibold loading">Loading</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes loading {
+             0% {
+                content: '';
+            }
+            33% {
+                content: '.';
+            }
+            66% {
+                content: '..';
+            }
+            100% {
+                content: '...';
+            }
+        }
+        .loading::after {
+            content: '';
+            animation: loading 1.5s steps(4) infinite;
+        }
+    </style>
+
+    <script>
+        function checkAuthAndLoadProfile() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            const username = sessionStorage.getItem('username');
+            const email = sessionStorage.getItem('email');
+            const className = sessionStorage.getItem('class_name');
+
+            if (!isLoggedIn || !username) {
+                handleError(new Error('Not logged in'));
+                return;
+            }
+
+            // Update UI with stored data
+            document.getElementById('username').textContent = username;
+            document.getElementById('email').textContent = email || 'N/A';
+            document.getElementById('class_name').textContent = className || 'N/A';
+
+            // Verify session with server
+            fetch('http://localhost:5000/api/check_session', {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Session invalid');
+                }
+            })
+            .catch(error => {
+                handleError(error);
+            });
+        }
+
+        function handleError(error) {
+            console.error('Error:', error);
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = error.message;
+
+            if (error.message.includes('No user data found') || error.message.includes('Session invalid')) {
+                sessionStorage.clear();
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        }
+
+        // Call the function when page loads
+        window.onload = checkAuthAndLoadProfile;
+    </script>
+</body>
+
+</html>

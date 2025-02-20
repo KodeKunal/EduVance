@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+  <link
+    rel="stylesheet"
+    as="style"
+    onload="this.rel='stylesheet'"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+  />
+
+  <title>EduVance - Virtual Lab</title>
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body class="bg-gray-50">
+  <div
+    class="relative flex min-h-screen flex-col bg-white overflow-x-hidden"
+    style="font-family: Lexend, 'Noto Sans', sans-serif;"
+  >
+    <div class="flex-grow">
+      <!-- Header -->
+      <header class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+        <!-- Logo and Search -->
+        <div class="flex items-center gap-8">
+          <!-- Logo -->
+          <div class="flex items-center gap-4 text-[#111517]">
+            <div class="h-8 w-8">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-lg font-bold">EduVance</h2>
+          </div>
+          <!-- Search Bar -->
+          <label class="flex items-center w-64">
+            <div
+              class="flex items-center justify-center bg-[#f0f3f4] rounded-l-xl h-10 px-4"
+              aria-hidden="true"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                <path
+                  d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                ></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              placeholder="Search"
+              class="flex-1 h-10 px-4 rounded-r-xl bg-[#f0f3f4] text-[#111517] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Search"
+            />
+          </label>
+        </div>
+
+        <!-- Notification, Chat, Profile -->
+        <div class="flex items-center gap-4">
+          <!-- Notification Button -->
+          <button
+            class="flex items-center justify-center h-10 w-10 bg-[#f0f3f4] rounded-full text-[#111517] hover:bg-[#e0e7eb]"
+            aria-label="Notifications"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+              <path
+                d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"
+              ></path>
+            </svg>
+          </button>
+
+          <!-- Chat Button -->
+          <button
+            class="flex items-center justify-center h-10 w-10 bg-[#f0f3f4] rounded-full text-[#111517] hover:bg-[#e0e7eb]"
+            aria-label="Chat"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+              <path
+                d="M221.8,175.94a8,8,0,0,1,0,11.32l-82.05,82a56,56,0,0,1-79.2-79.21L147.67,35.73a40,40,0,1,1,56.61,56.55L105,193A24,24,0,1,1,71,159L154.3,74.38A8,8,0,1,1,165.7,85.6L82.39,170.31a8,8,0,1,0,11.27,11.36L192.93,81A24,24,0,1,0,159,47L59.76,147.68a40,40,0,1,0,56.53,56.62l82.06-82A8,8,0,0,1,221.8,175.94Z"
+              ></path>
+            </svg>
+          </button>
+
+          <!-- Profile Image -->
+          <div
+            class="h-10 w-10 bg-center bg-no-repeat bg-cover rounded-full"
+            style='background-image: url("https://cdn.usegalileo.ai/stability/56422f9a-cd60-425d-b086-62a619d3102a.png");'
+            aria-label="User Profile"
+            role="img"
+          ></div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="flex justify-center py-8 px-4 sm:px-40">
+        <div class="w-full max-w-4xl bg-white rounded-lg shadow-md p-6">
+          <!-- Lab Header -->
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+            <div class="flex flex-col">
+              <h3 class="text-2xl font-bold text-[#111517]">Virtual Lab: DNA Extraction</h3>
+              <p class="text-sm text-[#647987]">Lab 1 of 8</p>
+            </div>
+            <button
+              class="px-4 py-2 bg-[#f0f3f4] text-[#111517] rounded-lg font-medium hover:bg-[#e0e7eb]"
+              aria-label="Mark as Complete"
+            >
+              Complete
+            </button>
+          </div>
+
+          <!-- Video Section -->
+          <div class="relative mb-6">
+            <div
+              class="w-full h-64 bg-center bg-cover rounded-lg"
+              style='background-image: url("https://cdn.usegalileo.ai/sdxl10/163ea271-54dc-4b27-abdb-0737d8567cdf.png");'
+              aria-label="Lab Video"
+            >
+              <button
+                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-lg hover:bg-opacity-60 transition-opacity"
+                aria-label="Play Video"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="white" viewBox="0 0 256 256">
+                  <path
+                    d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"
+                  ></path>
+                </svg>
+              </button>
+
+              <!-- Progress Bar -->
+              <div class="absolute inset-x-0 bottom-0 px-4 py-3">
+                <div class="flex items-center justify-center mb-2">
+                  <div class="w-full bg-gray-300 h-1 rounded-full">
+                    <div class="bg-white h-1 rounded-full w-1/3"></div>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between text-white text-xs">
+                  <span>0:37</span>
+                  <span>2:23</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Instructions -->
+          <section class="mb-6">
+            <h3 class="text-lg font-bold text-[#111517] mb-2">Instructions</h3>
+            <p class="text-base text-[#111517] mb-4">
+              In this lab, you'll learn how to extract DNA from cells using simple, everyday household items. You'll also learn the science behind why each step is important.
+            </p>
+          </section>
+
+          <!-- Materials -->
+          <section class="mb-6">
+            <h3 class="text-lg font-bold text-[#111517] mb-2">Materials</h3>
+            <div class="space-y-3">
+              <label class="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  class="h-5 w-5 rounded border-gray-300 text-[#47a6e6] focus:ring-[#47a6e6]"
+                />
+                <span class="text-base text-[#111517]">Salt</span>
+              </label>
+              <label class="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  class="h-5 w-5 rounded border-gray-300 text-[#47a6e6] focus:ring-[#47a6e6]"
+                />
+                <span class="text-base text-[#111517]">Dish soap</span>
+              </label>
+              <label class="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  class="h-5 w-5 rounded border-gray-300 text-[#47a6e6] focus:ring-[#47a6e6]"
+                />
+                <span class="text-base text-[#111517]">Strawberries</span>
+              </label>
+              <label class="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  class="h-5 w-5 rounded border-gray-300 text-[#47a6e6] focus:ring-[#47a6e6]"
+                />
+                <span class="text-base text-[#111517]">Rubbing alcohol</span>
+              </label>
+              <label class="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  class="h-5 w-5 rounded border-gray-300 text-[#47a6e6] focus:ring-[#47a6e6]"
+                />
+                <span class="text-base text-[#111517]">Coffee filter</span>
+              </label>
+            </div>
+          </section>
+
+          <!-- Steps -->
+          <section class="mb-6">
+            <h3 class="text-lg font-bold text-[#111517] mb-2">Steps</h3>
+            <div class="grid grid-cols-12 gap-4">
+              <!-- Step 1 -->
+              <div class="col-span-1 flex flex-col items-center">
+                <div class="h-2 w-2 bg-[#111517] rounded-full"></div>
+                <div class="w-px bg-gray-300 flex-grow"></div>
+              </div>
+              <div class="col-span-11">
+                <p class="text-base text-[#111517] font-medium">Mash the strawberries</p>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="col-span-1 flex flex-col items-center">
+                <div class="w-px bg-gray-300 flex-grow"></div>
+                <div class="h-2 w-2 bg-[#111517] rounded-full"></div>
+                <div class="w-px bg-gray-300 flex-grow"></div>
+              </div>
+              <div class="col-span-11">
+                <p class="text-base text-[#111517] font-medium">Add the salt and dish soap</p>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="col-span-1 flex flex-col items-center">
+                <div class="w-px bg-gray-300 flex-grow"></div>
+                <div class="h-2 w-2 bg-[#111517] rounded-full"></div>
+                <div class="w-px bg-gray-300 flex-grow"></div>
+              </div>
+              <div class="col-span-11">
+                <p class="text-base text-[#111517] font-medium">Filter the strawberry mixture</p>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="col-span-1 flex flex-col items-center">
+                <div class="w-px bg-gray-300 flex-grow"></div>
+                <div class="h-2 w-2 bg-[#111517] rounded-full"></div>
+                <div class="w-px bg-gray-300 flex-grow"></div>
+              </div>
+              <div class="col-span-11">
+                <p class="text-base text-[#111517] font-medium">Add the rubbing alcohol</p>
+              </div>
+
+              <!-- Step 5 -->
+              <div class="col-span-1 flex flex-col items-center">
+                <div class="w-px bg-gray-300 flex-grow"></div>
+                <div class="h-2 w-2 bg-[#111517] rounded-full"></div>
+              </div>
+              <div class="col-span-11">
+                <p class="text-base text-[#111517] font-medium">Extract the DNA</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Start Button -->
+          <div class="flex justify-center">
+            <button
+              class="px-6 py-3 bg-[#47a6e6] text-white rounded-lg font-bold text-sm hover:bg-[#3b8dc3] transition-colors"
+              aria-label="Start Lab"
+            >
+              Start
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="bg-white border-t border-gray-200 py-6">
+        <div class="max-w-4xl mx-auto px-4">
+          <div class="flex flex-wrap justify-center gap-6">
+            <a href="#" class="text-[#647987] text-base font-normal hover:underline">About</a>
+            <a href="#" class="text-[#647987] text-base font-normal hover:underline">Press</a>
+            <a href="#" class="text-[#647987] text-base font-normal hover:underline">Blog</a>
+            <a href="#" class="text-[#647987] text-base font-normal hover:underline">Careers</a>
+            <a href="#" class="text-[#647987] text-base font-normal hover:underline">Social</a>
+            <a href="#" class="text-[#647987] text-base font-normal hover:underline">Contact</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Mark as Complete button functionality
+    const completeButton = document.querySelector('[aria-label="Mark as Complete"]');
+    completeButton.addEventListener('click', () => {
+      alert('Lab marked as complete!');
+      // Optionally change button text or style after marking complete
+      completeButton.textContent = 'Completed';
+      completeButton.disabled = true;
+    });
+
+    // Start button functionality
+    const startButton = document.querySelector('[aria-label="Start Lab"]');
+    startButton.addEventListener('click', () => {
+      alert('Lab has started!');
+      // Here you can implement further actions like starting a timer or transitioning to the lab
+    });
+
+    // Checkbox functionality for materials
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', (e) => {
+        const material = e.target.nextElementSibling.textContent;
+        if (e.target.checked) {
+          alert(`${material} checked.`);
+        } else {
+          alert(`${material} unchecked.`);
+        }
+      });
+    });
+
+    // Video play button functionality
+    const videoButton = document.querySelector('[aria-label="Play Video"]');
+    videoButton.addEventListener('click', () => {
+      // Implement video playing logic
+      alert('Playing video...');
+    });
+  });
+</script>
+
+</html>

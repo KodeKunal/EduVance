@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700;900" />
+  <title>EduVance - Register</title>
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <style>
+        /* Floating label animations */
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .form-label {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0 0.25rem;
+            color: #64748b;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-control:focus + .form-label,
+        .form-control:not(:placeholder-shown) + .form-label {
+            top: 0;
+            font-size: 0.875rem;
+            color: #3b82f6;
+        }
+
+        /* Background animation */
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Card hover effect */
+        .register-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .register-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Button animation */
+        .submit-btn {
+            background: linear-gradient(45deg, #3b82f6, #2563eb);
+            background-size: 200% auto;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Success animation */
+        @keyframes success-animation {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="min-h-screen overflow-hidden">
+  <div class="animated-background"></div>
+  <div class="flex min-h-screen flex-col bg-white overflow-x-hidden" style="font-family: Lexend, 'Noto Sans', sans-serif;">
+    <header class="sticky top-0 z-50 bg-white bg-opacity-90 backdrop-blur-md border-b border-gray-200">
+      <h2 class="text-lg font-bold">EduVance</h2>
+    </header>
+
+    <main class="flex justify-center items-center min-h-[calc(100vh-4rem)] p-4">
+      <div class="register-card w-full max-w-md p-8 rounded-2xl">
+        <div class="text-center mb-8">
+          <h3 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+            Join EduVance
+          </h3>
+          <p class="text-gray-600 mt-2">Start your learning journey today</p>
+        </div>
+
+        <form id="registration-form" class="space-y-6">
+          <div class="form-group">
+            <input type="text" id="username" class="form-control" placeholder=" " required>
+            <label for="username" class="form-label">Username</label>
+          </div>
+
+          <div class="form-group">
+            <input type="email" id="email" class="form-control" placeholder=" " required>
+            <label for="email" class="form-label">Email</label>
+          </div>
+
+          <div class="form-group">
+            <input type="password" id="password" class="form-control" placeholder=" " required>
+            <label for="password" class="form-label">Password</label>
+          </div>
+
+          <div class="form-group">
+            <input type="password" id="confirm-password" class="form-control" placeholder=" " required>
+            <label for="confirm-password" class="form-label">Confirm Password</label>
+          </div>
+
+          <div class="form-group">
+            <input type="text" id="class" class="form-control" placeholder=" " required>
+            <label for="class" class="form-label">Class</label>
+          </div>
+
+          <button type="submit" class="submit-btn w-full py-3 text-white rounded-lg font-bold">
+            Create Account
+          </button>
+        </form>
+
+        <p class="mt-6 text-center text-gray-600">
+          Already have an account? 
+          <a href="login.html" class="text-blue-600 font-medium hover:text-blue-800 transition-colors">
+            Log in
+          </a>
+        </p>
+      </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-6">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="flex flex-wrap justify-center gap-6">
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">About</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Press</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Blog</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Careers</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Social</a>
+          <a href="#" class="text-[#647987] text-base font-normal hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const registrationForm = document.getElementById("registration-form");
+
+  registrationForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setLoading(true); // Show loading state
+
+    // Get form values
+    const username = document.getElementById("username").value.trim(); 
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const confirmPassword = document.getElementById("confirm-password").value.trim(); 
+
+    // Basic validation
+    if (!username || !email || !password || !confirmPassword) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Please fill in all fields.'
+      });
+      setLoading(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Passwords do not match.'
+      });
+      setLoading(false);
+      return;
+    }
+
+    // Form submission data
+    const formData = {
+      username: username,
+      email: email,
+      password: password,
+      className: document.getElementById("class").value.trim()
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Registration Successful!',
+          text: 'Your account has been created. Redirecting to login...',
+          timer: 2000,
+          showConfirmButton: false
+        }).then(() => {
+          window.location.href = 'login.html';
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Registration Failed',
+          text: data.message || 'An error occurred during registration'
+        });
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred during registration. Please try again.'
+      });
+    } finally {
+      setLoading(false);
+    }
+  });
+});
+
+// Add loading state to button
+function setLoading(loading) {
+    const button = document.querySelector('.submit-btn');
+    if (loading) {
+        button.innerHTML = `
+            <svg class="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+        `;
+        button.disabled = true;
+    } else {
+        button.innerHTML = 'Create Account';
+        button.disabled = false;
+    }
+}
+
+// Add success animation
+function showSuccess() {
+    const form = document.getElementById('registration-form');
+    form.innerHTML = `
+        <div class="text-center" style="animation: success-animation 0.5s ease forwards">
+            <svg class="w-16 h-16 mx-auto text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Registration Successful!</h3>
+            <p class="text-gray-600">Redirecting to profile completion...</p>
+        </div>
+    `;
+}
+  </script>
+  
+</body>
+</html>

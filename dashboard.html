@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+  <link
+    rel="stylesheet"
+    as="style"
+    onload="this.rel='stylesheet'"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700;900"
+  />
+  <title>EduVance - Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Include Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Custom CSS for enhanced design */
+    .dashboard-container {
+        background: linear-gradient(145deg, #f3f4f6 0%, #ffffff 100%);
+        min-height: 100vh;
+    }
+
+    .header-gradient {
+        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #3b82f6;
+        transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+    .stats-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .progress-chart-container {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        margin: 2rem 0;
+    }
+
+    .detailed-progress-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+
+    .progress-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .progress-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar-container {
+        height: 0.5rem;
+        background: #e5e7eb;
+        border-radius: 1rem;
+        overflow: hidden;
+        margin: 0.5rem 0;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+        border-radius: 1rem;
+        transition: width 0.5s ease;
+    }
+
+    .refresh-button {
+        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
+    }
+
+    .refresh-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.6);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="dashboard-container">
+    <!-- Header -->
+    <header class="header-gradient px-6 py-4">
+      <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+        <div class="flex items-center gap-8">
+          <div class="flex items-center gap-3 text-[#111517]">
+            <div class="flex items-center justify-center h-8 w-8">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
+                <path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z" fill="currentColor"></path>
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold leading-tight tracking-[-0.015em]">EduVance</h2>
+          </div>
+          <label class="flex items-center w-64">
+            <div class="flex items-center justify-center bg-[#f0f3f4] rounded-l-xl h-10 px-4" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+              </svg>
+            </div>
+            <input type="text" placeholder="Search" class="flex-1 h-10 px-4 rounded-r-xl bg-[#f0f3f4] text-[#111517] focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Search" />
+          </label>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="h-10 w-10 bg-center bg-no-repeat bg-cover rounded-full" style='background-image: url("https://cdn.usegalileo.ai/stability/56422f9a-cd60-425d-b086-62a619d3102a.png");' aria-label="User Profile" role="img"></div>
+          <button id="logoutButton" class="flex items-center justify-center h-10 px-4 bg-red-500 text-white rounded-lg font-bold text-sm hover:bg-red-600 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256" class="mr-2">
+              <path d="M224,104a8,8,0,0,1-8,8H136a8,8,0,0,1,0-16h80A8,8,0,0,1,224,104ZM224,168a8,8,0,0,1-8,8H136a8,8,0,0,1,0-16h80A8,8,0,0,1,224,168ZM184,136a8,8,0,0,1-8,8H136a8,8,0,0,1,0-16h40A8,8,0,0,1,184,136ZM96,136a8,8,0,0,1-8,8H56a8,8,0,0,1,0-16h32A8,8,0,0,1,96,136ZM56,168a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H48A8,8,0,0,1,56,168ZM224,232H32a8,8,0,0,1,0-16H224a8,8,0,0,1,0,16ZM32,112a8,8,0,0,1-8-8V32a8,8,0,0,1,8-8H224a8,8,0,0,1,0,16H32V104A8,8,0,0,1,32,112Z"></path>
+            </svg>
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Navigation Bar -->
+    <nav class="bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg">
+      <div class="container mx-auto px-6">
+      <ul class="flex items-center justify-start space-x-8 h-16">
+        <li>
+        <a href="course.html" class="nav-link text-white hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group">
+          Courses
+          <span class="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+        </a>
+        </li>
+        <li>
+        <a href="assignments.html" class="nav-link text-white hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group">
+          Assignments
+          <span class="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+        </a>
+        </li>
+        <li>
+        <a href="profile.html" class="nav-link text-white hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group">
+          Profile
+          <span class="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+        </a>
+        </li>
+        <li>
+        <a href="virtual_lab.html" class="nav-link text-white hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group">
+          Quick links
+          <span class="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+        </a>
+        </li>
+      </ul>
+      </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+        <button id="refreshProgress" class="refresh-button">
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            Refresh Progress
+          </span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="stats-card flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Total Progress</h3>
+            <p id="totalProgress" class="text-3xl font-bold text-blue-600 mt-4">0%</p>
+          </div>
+        </div>
+        <div class="stats-card flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Courses Completed</h3>
+            <p id="completedCourses" class="text-3xl font-bold text-green-600 mt-4">0</p>
+          </div>
+        </div>
+        <div class="stats-card flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Hours Spent</h3>
+            <p id="hoursSpent" class="text-3xl font-bold text-purple-600 mt-4">0h</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-chart-container">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Learning Progress</h2>
+        <canvas id="progressChart"></canvas>
+      </div>
+
+      <!-- User Progress -->
+      <section class="mt-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Detailed Progress</h2>
+        <div id="detailedProgress" class="detailed-progress-grid">
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="flex items-center justify-center border-t border-gray-200 py-4">
+      <span class="text-sm text-gray-500">© 2024 EduVance. All rights reserved.</span>
+    </footer>
+  </div>
+
+  <script>
+    // Add base URL configuration and authentication handling
+    const BASE_URL = 'http://localhost:5000'; // Keep only this declaration
+    
+    // Check session status on page load
+    async function checkSession() {
+        // First check if we have valid session data
+        const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+        const username = sessionStorage.getItem('username');
+
+        if (!isLoggedIn || !username) {
+            window.location.href = 'login.html';
+            return false;
+        }
+
+        try {
+            const response = await fetch(`${BASE_URL}/api/check_session`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Session invalid');
+            }
+
+            const data = await response.json();
+            
+            if (!data.user) {
+                throw new Error('No user data');
+            }
+            
+            sessionStorage.setItem('user_id', data.user.id); // Store user ID in session storage
+            return true;
+        } catch (error) {
+            console.error('Session check failed:', error);
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+            return false;
+        }
+    }
+
+    // Initialize everything - remove the interval
+    document.addEventListener('DOMContentLoaded', async () => {
+        if (await checkSession()) {
+            fetchUserProgress();
+            fetchCompletedCourses();
+        }
+    });
+
+    const ctx = document.getElementById("progressChart").getContext("2d");
+    let progressChart;
+
+    async function fetchUserProgress() {
+        try {
+            const userId = sessionStorage.getItem('user_id');
+            const response = await fetch(`${BASE_URL}/api/user_progress/${userId}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.status === 401) {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+                return;
+            }
+
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            console.log('Fetched progress:', data);
+            
+            if (data.error) {
+                console.error('Error:', data.error);
+                return;
+            }
+
+            // Update stats cards
+            updateStatsCards(data);
+            // Update existing chart and progress
+            updateProgressChart(data);
+            updateDetailedProgress(data);
+        } catch (error) {
+            console.error('Error fetching progress:', error);
+        }
+    }
+
+    function updateStatsCards(data) {
+        // Calculate total progress average
+        const totalProgress = data.reduce((acc, course) => 
+            acc + course.progress_percentage, 0) / data.length;
+        
+        // Count completed courses
+        const completedCount = data.filter(course => 
+            course.progress_percentage === 100).length;
+        
+        // Calculate total hours spent (assuming each video is 30 minutes)
+        const totalMinutes = data.reduce((acc, course) => 
+            acc + (course.completed_videos * 30), 0);
+        const hoursSpent = Math.round(totalMinutes / 60 * 10) / 10;
+
+        // Update the DOM
+        document.getElementById('totalProgress').textContent = 
+            `${Math.round(totalProgress)}%`;
+        document.getElementById('completedCourses').textContent = 
+            completedCount.toString();
+        document.getElementById('hoursSpent').textContent = 
+            `${hoursSpent}h`;
+    }
+
+    function updateProgressChart(data) {
+        const labels = data.map(item => item.course_name);
+        const progressData = data.map(item => item.progress_percentage);
+        const completionData = data.map(item => 
+            `${item.completed_videos}/${item.total_videos} videos completed`
+        );
+
+        if (progressChart) {
+            progressChart.destroy();
+        }
+
+        progressChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Course Progress (%)',
+                    data: progressData,
+                    backgroundColor: data.map(item => 
+                        item.progress_percentage === 100 ? 
+                        'rgba(75, 192, 192, 0.6)' : // Green for completed
+                        'rgba(54, 162, 235, 0.6)'   // Blue for in progress
+                    ),
+                    borderColor: data.map(item => 
+                        item.progress_percentage === 100 ? 
+                        'rgba(75, 192, 192, 1)' : 
+                        'rgba(54, 162, 235, 1)'
+                    ),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Completion Percentage'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: function(context) {
+                                return completionData[context.dataIndex];
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function updateDetailedProgress(data) {
+        const container = document.getElementById('detailedProgress');
+        container.innerHTML = '';
+
+        data.forEach(course => {
+            const card = document.createElement('div');
+            card.className = 'progress-card';
+            
+            const progressBars = course.individual_progress.map((progress, index) => `
+                <div class="mt-2">
+                    <div class="flex justify-between text-sm">
+                        <span>Video ${index + 1}</span>
+                        <span>${progress.toFixed(1)}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-blue-600 h-2.5 rounded-full" 
+                             style="width: ${progress}%"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            card.innerHTML = `
+                <h3 class="font-bold mb-2">${course.course_name}</h3>
+                <p class="text-sm text-gray-600 mb-2">
+                    ${course.completed_videos} of ${course.total_videos} videos completed
+                </p>
+                <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                    <div class="bg-blue-600 h-3 rounded-full" 
+                         style="width: ${course.progress_percentage}%"></div>
+                </div>
+                <div class="text-sm font-bold mb-2">Individual Video Progress:</div>
+                ${progressBars}
+            `;
+            
+            container.appendChild(card);
+        });
+    }
+
+    // Add refresh button handler
+    document.getElementById('refreshProgress').addEventListener('click', async () => {
+        const button = document.getElementById('refreshProgress');
+        button.disabled = true;
+        button.innerHTML = `
+            <span class="flex items-center">
+                <svg class="animate-spin w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Updating...
+            </span>
+        `;
+        
+        await fetchUserProgress();
+        
+        button.disabled = false;
+        button.innerHTML = `
+            <span class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Refresh Progress
+            </span>
+        `;
+    });
+
+    // Assume you have a function to handle login which fetches the student details
+    async function fetchCompletedCourses() {
+        try {
+            const userId = sessionStorage.getItem('user_id');
+            if (!userId) {
+                console.error('No user ID found');
+                return;
+            }
+
+            const response = await fetch(`${BASE_URL}/api/completed_courses/${userId}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const completedCourses = await response.json();
+            updateCompletedCourses(completedCourses);
+        } catch (error) {
+            console.error('Failed to fetch completed courses:', error);
+        }
+    }
+
+    function updateCompletedCourses(completedCourses) {
+        const completedCoursesList = document.getElementById('completedCourses');
+        completedCoursesList.innerHTML = ''; // Clear existing items
+        completedCourses.forEach(course => {
+            const li = document.createElement('li');
+            li.textContent = course;
+            completedCoursesList.appendChild(li);
+        });
+    }
+
+    async function checkLoginStatus() {
+        try {
+            const response = await fetch(`${BASE_URL}/api/check_login`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+            if (!data.logged_in) {
+                window.location.href = 'login.html';
+            }
+        } catch (error) {
+            console.error('Error checking login status:', error);
+        }
+    }
+
+    // Call checkLoginStatus on page load
+    checkLoginStatus();
+
+    // Logout Button Event
+    document.getElementById('logoutButton').addEventListener('click', async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/api/logout`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                window.location.href = 'login.html';
+            } else {
+                alert('Logout failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            alert('Logout failed. Please try again.');
+        }
+    });
+
+    // Initialize session check on page load
+    document.addEventListener('DOMContentLoaded', checkSession);
+
+    // Function to update details when user navigates away from courses page
+    async function updateDetailsOnNavigation() {
+      try {
+        const response = await fetch(`${BASE_URL}/api/update_details`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: sessionStorage.getItem('user_id')
+          })
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        console.log('Details updated:', data);
+      } catch (error) {
+        console.error('Error updating details:', error);
+      }
+    }
+
+    // Add event listener for navigation away from courses page
+    window.addEventListener('beforeunload', updateDetailsOnNavigation);
+  </script>
+
+</body>
+</html>

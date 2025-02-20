@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVance </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3498db',
+                        secondary: '#2c3e50',
+                        accent: '#e74c3c',
+                    },
+                },
+            },
+        }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <style>
+        .ai-assistant-wrapper {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .ai-tooltip {
+            visibility: hidden;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1001;
+            right: 100%;  /* Changed: position to the left of the button */
+            bottom: 50%;  /* Changed: center vertically */
+            transform: translateY(50%);  /* Changed: center vertically */
+            width: 200px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            margin-right: 10px;  /* Added: space between tooltip and button */
+        }
+
+        .ai-assistant-wrapper:hover .ai-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Add new animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .animate-slideInLeft {
+            animation: slideInLeft 0.6s ease-out;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-sans">
+    <header class="bg-gradient-to-r from-secondary to-primary text-white shadow-lg animate-slideInLeft">
+        <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+            <h1 class="text-3xl font-bold tracking-tight">EduVance</h1>
+            <nav>
+                <ul class="flex space-x-8">
+                    <li><a href="dashboard.html" class="hover:text-white/80 transition-colors duration-300 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                        </svg>
+                        Dashboard
+                    </a></li>
+                    <li><a href="course.html" class="hover:text-white/80 transition-colors duration-300 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                        </svg>
+                        Courses
+                    </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-12">
+        <section class="mb-16 animate-fadeInUp">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Discover Virtual Labs</h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="flex items-center bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <input type="text" id="searchInput" placeholder="Search for lab experiments, topics, or keywords..." 
+                           class="flex-grow p-5 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-primary/50 text-lg">
+                    <button onclick="searchLabs()" 
+                            class="bg-primary text-white px-8 py-5 rounded-r-xl hover:bg-primary/90 transition-colors duration-300 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        Search
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="labListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Lab cards will be dynamically inserted here -->
+        </section>
+    </main>
+
+    <footer class="bg-gradient-to-r from-secondary to-primary text-white py-6 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap items-center justify-between">
+                <div class="w-full md:w-auto text-center md:text-left mb-4 md:mb-0">
+                    <p class="text-sm">&copy; 2024 EduVance. All rights reserved.</p>
+                </div>
+                <div class="w-full md:w-auto text-center md:text-right">
+                    <div class="flex justify-center md:justify-end space-x-6">
+                        <a href="#" class="text-white/80 hover:text-white transition-colors duration-300 text-sm">Terms</a>
+                        <a href="#" class="text-white/80 hover:text-white transition-colors duration-300 text-sm">Privacy</a>
+                        <a href="#" class="text-white/80 hover:text-white transition-colors duration-300 text-sm">Contact</a>
+                        <a href="#" class="text-white/80 hover:text-white transition-colors duration-300">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="ai-assistant-wrapper">
+        <div class="ai-tooltip">Need help? Chat with our AI Assistant!</div>
+        <gemini-chat-widget api-key="AIzaSyAOIO-yDhasKYEbvu-42r9sH4g5WAynjeg" model="gemini-1.5-flash"></gemini-chat-widget>
+    </div>
+
+    <script src="https://gemini-widget.vercel.app/widget.umd.js"></script>
+
+    <script>
+        const apiKey = 'AIzaSyAOIO-yDhasKYEbvu-42r9sH4g5WAynjeg';
+
+        
+
+        function searchLabs() {
+            const query = document.getElementById('searchInput').value;
+
+            if (query.trim() === '') {
+                alert('Please enter a search term');
+                return;
+            }
+
+            const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&key=${apiKey}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.items) {
+                        displayLabs(data.items);
+                    } else {
+                        alert('No results found');
+                    }
+                })
+                .catch(error => console.error('Error fetching data from YouTube API:', error));
+        }
+
+        function displayLabs(labs) {
+            const container = document.getElementById('labListContainer');
+            container.innerHTML = '';
+
+            labs.forEach((lab, index) => {
+                const labElement = document.createElement('div');
+                labElement.classList.add('bg-white', 'rounded-xl', 'shadow-lg', 'overflow-hidden', 'transition-all', 
+                    'duration-300', 'hover:shadow-xl', 'hover:scale-[1.02]', 'opacity-0');
+                // Add staggered animation delay
+                labElement.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s forwards`;
+                labElement.innerHTML = `
+                    <div class="relative">
+                        <img src="${lab.snippet.thumbnails.medium.url}" alt="${lab.snippet.title}" class="w-full h-56 object-cover">
+                        <button onclick="playVideo('${lab.id.videoId}', this)" class="absolute inset-0 flex items-center justify-center bg-black/60 text-white opacity-0 hover:opacity-100 transition-all duration-300">
+                            <div class="transform scale-75 hover:scale-90 transition-transform duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">${lab.snippet.title}</h3>
+                        <p class="text-gray-600 leading-relaxed">${lab.snippet.description}</p>
+                    </div>
+                `;
+                container.appendChild(labElement);
+            });
+        }
+
+        function playVideo(videoId, button) {
+            const parentDiv = button.closest('.relative');
+            parentDiv.innerHTML = `
+                <iframe width="100%" height="200" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            `;
+        }
+
+        // Add scroll reveal animation
+        window.addEventListener('scroll', () => {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const isVisible = rect.top <= window.innerHeight * 0.8;
+                if (isVisible) {
+                    element.classList.add('animate-fadeInUp');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

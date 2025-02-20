@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+  <link
+    rel="stylesheet"
+    as="style"
+    onload="this.rel='stylesheet'"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend%3Awght@400;500;700;900&amp;family=Noto+Sans%3Awght@400;500;700;900"
+  />
+  <title>EduVance - Login</title>
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+  
+  <!-- You can remove the inline <style> block if you're using Tailwind CDN -->
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <style>
+    .floating-label {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    .floating-label input {
+        transition: all 0.2s ease;
+    }
+    .floating-label label {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all 0.2s ease;
+        pointer-events: none;
+    }
+    .floating-label input:focus ~ label,
+    .floating-label input:not(:placeholder-shown) ~ label {
+        top: 0;
+        font-size: 0.75rem;
+        background: white;
+        padding: 0 0.25rem;
+    }
+    .input-animation {
+        transform: translateX(0);
+        transition: transform 0.3s ease;
+    }
+    .input-animation:hover {
+        transform: translateX(5px);
+    }
+    .btn-loading {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-loading::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        animation: loading 1.5s infinite;
+    }
+    @keyframes loading {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-white">
+  <div
+    class="relative flex min-h-screen flex-col items-center justify-center overflow-x-hidden transition-all duration-300 hover:bg-opacity-95 group/design-root"
+    style='font-family: Lexend, "Noto Sans", sans-serif;'
+  >
+    <div class="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg transform transition-all duration-300 hover:shadow-xl">
+      <header class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3 text-[#111517]">
+          <div class="flex items-center justify-center h-8 w-8">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
+              <path
+                d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </div>
+          <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">EduVance</h2>
+        </div>
+        <a href="register.html" class="min-w-[84px] h-10 px-4 bg-[#47a6e6] text-white rounded-lg font-bold text-sm flex items-center justify-center">Sign up</a>
+      </header>
+
+      <div class="relative bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-lg mb-6 h-40 group">
+        <!-- Background image container -->
+        <img 
+          src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+          alt="Welcome" 
+          class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <!-- Text content -->
+        <div class="relative p-4 z-10">
+          <p class="text-white text-2xl font-bold leading-tight">Welcome back!</p>
+        </div>
+      </div>
+
+      <form id="loginForm" class="space-y-6">
+        <div class="floating-label">
+          <input
+            id="username"
+            name="username"
+            type="text"
+            placeholder=" "
+            required
+            class="input-animation mt-1 w-full h-12 px-4 text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 border-gray-300 bg-white transition-all duration-300"
+          />
+          <label for="username">Username</label>
+        </div>
+        <div class="floating-label">
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder=" "
+            required
+            class="input-animation mt-1 w-full h-12 px-4 text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 border-gray-300 bg-white transition-all duration-300"
+          />
+          <label for="password">Password</label>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <a href="/forgot-password" class="text-sm text-blue-500 hover:underline">Forgot your password?</a>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 mt-4 bg-blue-500 text-white rounded-lg font-bold text-lg tracking-wider focus:outline-none focus:ring-4 focus:ring-blue-200 hover:bg-blue-600 transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+        >
+          Log in
+        </button>
+      </form>
+
+      <p class="text-center text-sm text-gray-600 mt-4">
+        New to EduVance? <a href="register.html" class="text-blue-500 hover:underline">Sign up now</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Include the JavaScript file -->
+  <script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVance AI Tutor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        textarea {
+            width: 100%;
+            max-width: 500px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+    <h1>EduVance AI Tutor</h1>
+    <textarea id="userInput" placeholder="Type your question..."></textarea>
+    <br>
+    <button onclick="sendQuery()">Ask AI Tutor</button>
+    <div id="response"></div>
+    <script src="https://gemini-widget.vercel.app/widget.umd.js"></script> <gemini-chat-widget api-key="AIzaSyAOIO-yDhasKYEbvu-42r9sH4g5WAynjeg" model="gemini-1.5-flash"></gemini-chat-widget>
+
+    <script>
+        async function sendQuery() {
+            const userInput = document.getElementById('userInput').value;
+            const responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = ""; // Clear previous response
+
+            if (!userInput.trim()) {
+                responseDiv.innerHTML = '<span class="error">Please enter a question!</span>';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/ai-tutor', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user_input: userInput })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    responseDiv.innerHTML = `<span class="error">Error: ${errorText}</span>`;
+                    return;
+                }
+
+                const data = await response.json();
+                responseDiv.innerHTML = data.response
+                    ? `<strong>AI Response:</strong> ${data.response}`
+                    : '<span class="error">No response from the AI.</span>';
+
+            } catch (error) {
+                responseDiv.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
