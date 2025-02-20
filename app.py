@@ -496,7 +496,7 @@ def get_profile():
 
         return jsonify({'message': 'Invalid credentials'}), 401
 
-GEMINI_API_KEY = os.getenv("AIzaSyAOIO-yDhasKYEbvu-42r9sH4g5WAynjeg")
+GEMINI_API_KEY = os.getenv("YOUR_GEMINI_APIKEY")
 
 @app.route('/api/update-progress', methods=['POST'])
 def update_progress():
